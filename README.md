@@ -1,5 +1,5 @@
-# jDoH
-DNS-Over-HTTPS proxy java implementing
+# jDoH java client
+DNS-Over-HTTPS
 
 TO:DO
 -----
