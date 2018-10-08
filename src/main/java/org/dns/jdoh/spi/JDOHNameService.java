@@ -2,10 +2,12 @@ package org.dns.jdoh.spi;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.security.AccessController;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
 
 import sun.net.spi.nameservice.NameService;
-import sun.security.action.GetPropertyAction;
 
 public class JDOHNameService implements NameService {
 	
@@ -20,63 +22,53 @@ public class JDOHNameService implements NameService {
 	private boolean PreferV6 = false;
 	
 	
+	private static Map<String, LinkedList<InetAddress>> cache = new HashMap<>();
 	
-	static Object loadImpl(String implName) {
-        Object impl = null;
-
-        /*
-         * Property "impl.prefix" will be prepended to the classname
-         * of the implementation object we instantiate, to which we
-         * delegate the real work (like native methods).  This
-         * property can vary across implementations of the java.
-         * classes.  The default is an empty String "".
-         */
-        String prefix = AccessController.doPrivileged(
-                      new GetPropertyAction("impl.prefix", ""));
-        try {
-            impl = Class.forName("java.net." + prefix + implName).newInstance();
-        } catch (ClassNotFoundException e) {
-            System.err.println("Class not found: java.net." + prefix +
-                               implName + ":\ncheck impl.prefix property " +
-                               "in your properties file.");
-        } catch (InstantiationException e) {
-            System.err.println("Could not instantiate: java.net." + prefix +
-                               implName + ":\ncheck impl.prefix property " +
-                               "in your properties file.");
-        } catch (IllegalAccessException e) {
-            System.err.println("Cannot access class: java.net." + prefix +
-                               implName + ":\ncheck impl.prefix property " +
-                               "in your properties file.");
-        }
-
-        if (impl == null) {
-            try {
-                impl = Class.forName(implName).newInstance();
-            } catch (Exception e) {
-                throw new Error("System property impl.prefix incorrect");
-            }
-        }
-
-        return  impl;
-    }
 	
 	
 	public JDOHNameService() {
+		LinkedList<InetAddress> googelDns = new LinkedList<>();
+		addAddressToList(new byte[] {(byte) 172, (byte) 217, (byte)19, (byte)46 }, googelDns);
+//		googelDns.add(InetAddress.getByAddress(new byte[] {(byte) 172, (byte) 217, 19, 46}));
+//				(("172.217.19.46");
+		cache.put("dns.google.com", googelDns);
 		
+		LinkedList<InetAddress> cloudflareDns = new LinkedList<>();
+		addAddressToList(new byte[] {(byte) 104, (byte) 16, (byte)111, (byte)25}, cloudflareDns);
+		cache.put("cloudflare-dns.com", cloudflareDns);
+		
+	}
+	
+	private void addAddressToList(byte[] ipAddress , LinkedList<InetAddress> list){
+		try {
+			list.add(InetAddress.getByAddress(ipAddress));
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
 	}
 
 
 	@Override
 	public String getHostByAddr(byte[] hostAdress) throws UnknownHostException {
-		
+		System.out.println(Arrays.toString(hostAdress));
 		return null;
 	}
 
 
 	@Override
 	public InetAddress[] lookupAllHostAddr(String hostname) throws UnknownHostException {
-		
-		return null;
+		InetAddress[] addresses;
+		if(cache.containsKey(hostname)) {
+			LinkedList<InetAddress> list = cache.get(hostname);
+			
+			addresses =  new InetAddress[list.size()];
+			for (int i = 0; i < addresses.length; i++) {
+				addresses[i] = list.get(i);
+			}
+		}else {
+			addresses = new InetAddress[0];
+		}
+		return addresses;
 	}
 
 
