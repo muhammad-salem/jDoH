@@ -10,7 +10,3 @@ TO:DO
  - add custon dns servers, Google and Cloudflare 
  - support host file linux/window
  
- 
-Dependices
-----------
- - dnsjava/2.1.8/
