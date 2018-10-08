@@ -12,7 +12,7 @@ public class Request {
 	 * @param zeroing
 	 * @return
 	 */
-	String name;
+	public String name;
 
 	
 
@@ -24,14 +24,14 @@ public class Request {
 	 * servers need not return all records for such queries; some do not
 	 * respond, and others (such as cloudflare.com) return only HINFO
 	 */
-	String type;
+	public String type = "a";
 
 	/**
 	 * boolean, default: false The CD (checking disabled) bit. Use cd, cd=1, or
 	 * cd=true to disable DNSSEC validation; use cd=0, cd=false, or no cd
 	 * parameter to enable DNSSEC validation.
 	 */
-	boolean cd;
+	public boolean cd = false;
 
 	/**
 	 * string, default: empty The edns0-client-subnet option. Format is an IP
@@ -42,7 +42,7 @@ public class Request {
 	 * Public DNS normally sends approximate network information (usually
 	 * zeroing out the last part of your IPv4 address).
 	 */
-	String edns_client_subnet;
+	public String edns_client_subnet;
 
 	/**
 	 * string, ignored
@@ -67,6 +67,20 @@ public class Request {
 	
 	@Override
 	public String toString() {
-		return name;
+		StringBuilder builder = new StringBuilder();
+		if(name != null) {
+			builder.append("name="+name); 
+		}else {
+			return "";
+		}
+		if(type != null) {
+			builder.append("&type="+type); 
+		}
+		if(cd) {
+			builder.append("&cd=1"); 
+		}
+		
+		
+		return builder.toString();
 	}
 }
