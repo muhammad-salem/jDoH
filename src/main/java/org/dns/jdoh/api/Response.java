@@ -1,7 +1,9 @@
-package org.dns.jdoh.google;
+package org.dns.jdoh.api;
 
 public class Response {
 	/**
+	 * The Response Code of the DNS Query. These are defined here: https://www.iana.org/assignments/dns-parameters/dns-parameters.xhtml#dns-parameters-6
+	 * 
 	 *  0 -> NOERROR - Standard DNS response code (32 bit integer).
 	 *  2 -> SERVFAIL - Standard DNS response code (32 bit integer).
 	 */

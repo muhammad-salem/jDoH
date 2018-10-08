@@ -1,4 +1,4 @@
-package org.dns.jdoh.google;
+package org.dns.jdoh.api;
 
 public class Answer {
 	

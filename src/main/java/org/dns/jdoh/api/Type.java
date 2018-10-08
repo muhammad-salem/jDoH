@@ -1,4 +1,4 @@
-package org.dns.jdoh.google;
+package org.dns.jdoh.api;
 
 /**
  * RR type can be represented as a number in [1, 65535] or a canonical string
