@@ -1,6 +1,7 @@
 package org.dns.jdoh.worker;
 
 
+import org.dns.jdoh.api.RequestMessage;
 import org.dns.jdoh.dnsserver.RequestSupplier;
 
 import java.net.InetAddress;
@@ -29,6 +30,10 @@ public class DohBuilderFactory {
 
     public void useGoogleDOH() {
         this.builder.setRequestMessage(RequestSupplier.GOOGLE);
+    }
+
+    public void useRequestMessage(RequestMessage message) {
+        this.builder.setRequestMessage(message);
     }
 
 
