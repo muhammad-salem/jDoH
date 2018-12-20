@@ -1,5 +1,5 @@
 # jDoH java client
-DNS-Over-HTTPS
+DOH (DNS Over HTTPS) java implementing
 
 features
 --------
